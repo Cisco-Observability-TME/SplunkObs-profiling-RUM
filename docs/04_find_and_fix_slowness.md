@@ -1,6 +1,6 @@
 # AlwaysOn Profiling Workshop
 
-## Part 3: Find and Fix Code
+## Part 4: Find and Fix Code
 
 In this section, we pick up where we left off last time. 
 We will use the profiling tool to explore our slow span and link it

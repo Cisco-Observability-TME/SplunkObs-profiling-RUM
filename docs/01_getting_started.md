@@ -10,8 +10,9 @@ sample application and how to ingest telemetry through the collector.
 From a new shell, clone this repo by running the following:
 
 ```
-$ git clone https://github.com/signalfx/tracing-examples.git
-$ cd tracing-examples/profiling/workshop
+$ git clone https://github.com/Cisco-Observability-TME/SplunkObs-profiling-RUM.git
+
+$ cd workshop
 ```
 The rest of the workshop will take place in this directory.
 
@@ -36,6 +37,10 @@ total 6152
 
 Great! We now have an executable jar containing our sample app. We will run it shortly,
 but first we need to...
+
+### Install docker
+Follow instructions:
+https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
 
 ### Fire up a Collector
 

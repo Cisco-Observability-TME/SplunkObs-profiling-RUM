@@ -1,3 +1,4 @@
 workshop/.gradle
 *.iml
 .idea
+workshop/build/*
