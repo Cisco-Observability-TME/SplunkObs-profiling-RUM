@@ -39,10 +39,23 @@ Great! We now have an executable jar containing our sample app. We will run it s
 but first we need to...
 
 ### Install docker
-Instructions:
+Instructions for Ubuntu
 https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
 
 ### Fire up a Collector
+
+https://docs.splunk.com/observability/en/gdi/opentelemetry/opentelemetry.html#otel-intro
+
+Guided install for the Collector
+Splunk Observability Cloud offers a guided setup to install the Collector:
+1. Log in to Splunk Observability Cloud.
+2. In the navigation menu, select Data Management.
+3. Go to the Available integrations tab, or select Add Integration in the Deployed integrations tab.
+4. Select one of the platforms in the Splunk OpenTelemetry Collector section.
+5. Follow the step-by-step process provided in the platform's guided setup.
+
+
+<img src="../images/collector-guided-install.png" alt="collector install" width="400px"/>
 
 The Splunk Distribution of OpenTelemetry Java Instrumentation agent sends its telemetry
 through an OpenTelemetry Collector. In order to get data ingested into the Splunk 
