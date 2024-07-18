@@ -1,4 +1,4 @@
-# AlwaysOn Profiling Workshop
+# AlwaysOn Profiling + RUM Workshop
 
 ## Part 1: Getting Started
 
@@ -39,7 +39,7 @@ Great! We now have an executable jar containing our sample app. We will run it s
 but first we need to...
 
 ### Install docker
-Follow instructions:
+Instructions:
 https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
 
 ### Fire up a Collector
@@ -55,7 +55,7 @@ For this workshop, we've provided a configuration that has this set up for you.
 If you want to see the details, take a peek in `etc/collector.yaml`.
 
 Before you start the collector, you will need an access token.
-You can find an access token by logging into the Splunk Playground, 
+You can find an access token by logging into the Splunk Observability, 
 expanding the hamburger menu, and choosing "Organization Settings" -> "[Access Tokens](https://app.signalfx.com/#/organization/current?selectedKeyValue=sf_section:accesstokens)".
 
 <img src="../images/access_tokens.png" alt="access tokens" width="400px"/>
@@ -66,7 +66,7 @@ to the clipboard.
 <img src="../images/access_tokens2.png" alt="access tokens" width="400px"/>
 
 Now we can run the collector. For the purposes of this workshop, we assume that 
-you are working in the "Splunk Playground", which is `us0`. If you are in another 
+you are working in the `us0` "Splunk Realm". If you are in another 
 realm, change `us0` below to your specific realm.
 
 Run the following, substituting `<SPLUNK_TOKEN>` for youractual token value copied above:
