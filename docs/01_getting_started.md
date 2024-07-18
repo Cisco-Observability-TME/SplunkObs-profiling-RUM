@@ -57,6 +57,10 @@ Splunk Observability Cloud offers a guided setup to install the Collector:
 
 <img src="../images/collector-guided-install.png" alt="collector install" width="400px"/>
 
+See example Configuration:
+<img src="../images/collector-config-example.png.png" alt="collector config" width="400px"/>
+
+
 The Splunk Distribution of OpenTelemetry Java Instrumentation agent sends its telemetry
 through an OpenTelemetry Collector. In order to get data ingested into the Splunk 
 Observability Cloud, we need an available collector. In a production environment,
