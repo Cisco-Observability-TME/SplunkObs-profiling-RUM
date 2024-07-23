@@ -12,7 +12,7 @@ From a new shell, clone this repo by running the following:
 ```
 $ git clone https://github.com/Cisco-Observability-TME/SplunkObs-profiling-RUM.git
 
-$ cd workshop
+$ cd SplunkObs-profiling-RUM/workshop
 ```
 The rest of the workshop will take place in this directory.
 
@@ -38,12 +38,11 @@ total 6152
 Great! We now have an executable jar containing our sample app. We will run it shortly,
 but first we need to...
 
-### Install docker
-Instructions for Ubuntu
-https://docs.docker.com/engine/install/ubuntu/#install-using-the-repository
+### Fire up a Collector locally
 
-### Fire up a Collector
+You can run the collector in many different environments like docker or kubernetes. For this example, we will use the linux service option and it will run as a regular linux process in agent mode. This will collect linux metrics and provides us with infrastructure level visibility.
 
+More information about the collector:
 https://docs.splunk.com/observability/en/gdi/opentelemetry/opentelemetry.html#otel-intro
 
 Guided install for the Collector
@@ -58,63 +57,27 @@ Splunk Observability Cloud offers a guided setup to install the Collector:
 
 <img src="../images/collector-config-example.png" alt="collector config" width="400px"/>
 
+Run the following command to install the OpenTelemetry Collector to capture metrics and traces and enable profiling:
+Change `<SPLUNK_TOKEN>` for youractual token value:
 
-The Splunk Distribution of OpenTelemetry Java Instrumentation agent sends its telemetry
-through an OpenTelemetry Collector. In order to get data ingested into the Splunk 
-Observability Cloud, we need an available collector. In a production environment,
-this might be running on a separate host or deployed as a k8s sidecar. For our workshop,
-we will just run one locally on our own machine inside docker.
+curl -sSL https://dl.signalfx.com/splunk-otel-collector.sh > /tmp/splunk-otel-collector.sh && \
+sudo sh /tmp/splunk-otel-collector.sh --realm us1 -- <SPLUNK_TOKEN> --mode agent --with-instrumentation --deployment-environment mkuglerr_dev01 --discovery --enable-profiler --enable-profiler-memory --enable-metrics
 
-The collector must be configured to accept OTLP logs and export them via [HEC format](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/exporter/splunkhecexporter).
-For this workshop, we've provided a configuration that has this set up for you. 
-If you want to see the details, take a peek in `etc/collector.yaml`.
+The collector's main configuration file is located at /etc/otel/collector/agent_config.yaml,
+and the environment file is located at /etc/otel/collector/splunk-otel-collector.conf.
 
-Before you start the collector, you will need an access token.
-You can find an access token by logging into the Splunk Observability, 
-expanding the hamburger menu, and choosing "Organization Settings" -> "[Access Tokens](https://app.signalfx.com/#/organization/current?selectedKeyValue=sf_section:accesstokens)".
-
-<img src="../images/access_tokens.png" alt="access tokens" width="400px"/>
-
-Expand the "Workshop" token and click on the blue "Show Token". Then click "Copy" to have it copied
-to the clipboard.
-
-<img src="../images/access_tokens2.png" alt="access tokens" width="400px"/>
-
-Now we can run the collector. For the purposes of this workshop, we assume that 
-you are working in the `us0` "Splunk Realm". If you are in another 
-realm, change `us0` below to your specific realm.
-
-Run the following, substituting `<SPLUNK_TOKEN>` for youractual token value copied above:
+Now we can restart the collector. 
 
 ```
-$ docker run -d --rm --name collector \
-    -v "$(pwd)/etc/collector.yaml":/etc/otel/config.yaml \
-    -p 4317:4317 \
-    -e SPLUNK_TOKEN=<SPLUNK_TOKEN> \
-    -e SPLUNK_REALM=us0 \
-    otel/opentelemetry-collector-contrib:0.36.0 
+$ sudo systemctl restart splunk-otel-collector
 ```
 
-_NOTE_: The `$(pwd)` above inserts the current directory and is expected to be the
-`workshop` directory. If you are on Windows, you may need to substitute `$(pwd)` with
-the full literal path to the workshop directory.
-
-If successful, docker prints out the container guid (long hex number). Confirm that it is working 
-by running:
-```
-$ docker ps --filter name=collector
-CONTAINER ID   IMAGE                                         COMMAND                  CREATED         STATUS         PORTS                       NAMES
-44cf54983df4   otel/opentelemetry-collector-contrib:0.36.0   "/otelcontribcol --c…"   2 minutes ago   Up 2 minutes   4317/tcp, 55679-55680/tcp   collector
-```
-
-### Download splunk-otel-java instrumentation
-
-We want to run the application with the Splunk distribution of OpenTelemetry java instrumentation.
-Download the latest release:
+If successful, we can check the status of the service. Confirm that it is working by running:
 
 ```
-$ curl -L -o splunk-otel-javaagent-all.jar https://github.com/signalfx/splunk-otel-java/releases/latest/download/splunk-otel-javaagent-all.jar
+$ sudo systemctl status splunk-otel-collector
 ```
+
 
 ### Run the application
 
@@ -124,13 +87,13 @@ other workshop participants, we need to select a service name. Recommend choosin
 service name in the command below:
 
 ```
-$ java -javaagent:splunk-otel-javaagent-all.jar \
-    -Dotel.resource.attributes=deployment.environment=workshop \
-    -Dotel.service.name=profiling-workshop-<xxx> \
+$ java  \
+    -Dotel.resource.attributes=deployment.environment=mkuglerr_env01 \
+    -Dotel.service.name=profiling-workshop-mkuglerr \
     -jar build/libs/profiling-workshop-all.jar
 ```
 
-To verify that the service is working, visit http://localhost:9090. You should be
+To verify that the service is working, visit http://yourip:9090. You should be
 met with The Door Game intro screen. Play through a couple of times to get the 
 feel for the application flow... and then play many times to ensure there are enough spans to create usable Profiling data...
 
@@ -142,7 +105,7 @@ We can first check in on the collector to verify that it is receiving trace data
 Let's look in the logs:
 
 ```
-$ docker logs collector
+$ journalctl -u splunk-otel-collector
 ```
 
 Near the bottom of the logs you should hopefully see output that looks like this:
@@ -155,7 +118,7 @@ You should see one or more lines like the above and no errors. If you have error
 check that you have started the collector with the correct token and realm
 (as shown above). 
 
-We haven't turned the profiler on yet, so we shouldn't see any logs being exported yet.
+
 
 It's time to see the service in APM. [Visit this link](https://app.signalfx.com/#/apm?endTime=Now&environments=workshop&filter=&job=full&startTime=-15m)
 and scroll to the bottom to see the list of services.

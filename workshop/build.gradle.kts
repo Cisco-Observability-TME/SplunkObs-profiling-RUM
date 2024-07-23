@@ -14,10 +14,11 @@ tasks.withType<Jar> {
 }
 
 dependencies {
-    implementation("com.sparkjava:spark-core:2.9.3")
-    implementation("org.slf4j:slf4j-api:1.7.32")
-    implementation("org.slf4j:slf4j-simple:1.7.32")
-    implementation("io.opentelemetry:opentelemetry-api:1.0.0")
-    implementation("io.opentelemetry:opentelemetry-extension-annotations:1.0.0")
+    implementation("com.sparkjava:spark-core:2.9.4")
+    implementation("org.slf4j:slf4j-api:2.0.13")
+    implementation("org.slf4j:slf4j-simple:2.0.13")
+    implementation("ch.qos.logback:logback-classic:1.5.6")
+    implementation("io.opentelemetry:opentelemetry-api:1.40.0")
+    implementation("io.opentelemetry:opentelemetry-extension-annotations:1.18.0")
 
 }

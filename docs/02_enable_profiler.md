@@ -53,7 +53,7 @@ New jfr file detected: ./otel-profiler-2021-11-13T13_04_42.jfr
 
 So far so good. Let's check the collector logs to verify that it is exporting
 the profiling data as log messages. Just like in the previous section, we will
-run `docker logs collector`.
+run `journalctl -u splunk-otel-collector`.
 
 You should see some collector output lines that look like this:
 
@@ -68,7 +68,7 @@ The thing to look for there is "LogsExporter" and a positive number of `#logs` b
 ### Profiling in APM
 
 Visit http://localhost:9090 and play a few more rounds of The Door Game.
-Then head on over to [https://app.signalfx.com/#/apm](https://app.signalfx.com/#/apm) 
+Then head on over to [https://app.us1.signalfx.com/#/apm](https://app.us1.signalfx.com/#/apm) 
 and click on the name of your service to visit the Troubleshooting view.
 
 You may need to scroll, but in the rightmost column you should see the "AlwaysOn Profiling"
@@ -129,8 +129,7 @@ We've come a long way already!
 
 ## Next steps
 
-[Click here to go on to part 3](03_find_and_fix_slowness.md), where we
-will use the profiler tools to identify the specific area of code that 
-was causing our slow-down, and we will work to improve it...
+[Click here to go on to part 3](03_enable_RUM.md), where we
+will use enable Browser Monitoring to get deatils about user behaviour while playing the game...
 
 

@@ -1,6 +1,30 @@
 <!doctype html>
 <html lang="en">
 <head>
+
+<script src="https://cdn.signalfx.com/o11y-gdi-rum/v0.19.0/splunk-otel-web.js" crossorigin="anonymous"></script>
+<script>
+    SplunkRum.init({
+        realm: "us1",
+        rumAccessToken: "SY8ZqV1LHQOTVKxSE7i9Dg",
+        applicationName: "profiling-workshop-webapp",
+        deploymentEnvironment: "mkuglerr_env01"
+    });
+</script>
+
+
+
+
+<script src="https://cdn.signalfx.com/o11y-gdi-rum/v0.19.0/splunk-otel-web-session-recorder.js" crossorigin="anonymous"></script>
+<script>
+SplunkSessionRecorder.init({
+  app: "profiling-workshop-webapp",
+  realm: "us1",
+  rumAccessToken: "SY8ZqV1LHQOTVKxSE7i9Dg",
+  debug: true
+});
+</script>
+
     <title>The Door Game</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
