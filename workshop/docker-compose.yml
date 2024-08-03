@@ -1,0 +1,44 @@
+
+
+
+networks:
+  default:
+    name: otel-illuminate-demo
+    driver: bridge
+
+services:
+  # Mygame
+  mygame:
+    image: mygame:latest
+    environment:
+      - OTEL_EXPORTER_OTLP_ENDPOINT=http://otelcol:4318
+    restart: always
+    ports:
+      - "9090:9090"
+      
+  # Collector
+  otelcol:
+    image: quay.io/signalfx/splunk-otel-collector:latest
+    restart: always
+    command: ["--config=/etc/otel-collector-config.yaml", "${OTELCOL_ARGS}"]
+    volumes:
+      - ./etc/splunk_collector_config.yaml:/etc/otel-collector-config.yaml
+    environment:
+      - SPLUNK_ACCESS_TOKEN=DvUejX0LLmm33hVW6qkRAg
+      - SPLUNK_API_URL=https://api.us1.signalfx.com
+      - SPLUNK_INGEST_URL=https://ingest.us1.signalfx.com
+      - SPLUNK_TRACE_URL=https://ingest.us1.signalfx.com/v2/trace
+      - SPLUNK_HEC_URL=https://ingest.us1.signalfx.com/v1/log
+      - SPLUNK_PROFILER_ENABLED=true
+      - SPLUNK_PROFILER_MEMORY_ENABLED=true
+      
+    ports:
+      - "14250:14250"   # pprof extension
+      - "14268:14268"   # Prometheus metrics exposed by the collector
+      - "8889:8889"   # Prometheus exporter metrics
+      - "6060:6060" # health_check extension
+      - "4317:4317"   # OTLP gRPC receiver
+      - "4318:4318"   # OTLP HTTP receiver
+      - "7276:7276" # zpages extension
+
+
