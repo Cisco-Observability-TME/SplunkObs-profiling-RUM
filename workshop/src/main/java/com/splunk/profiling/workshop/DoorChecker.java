@@ -28,6 +28,9 @@ public class DoorChecker {
 
     private boolean checkDoorTwo(GameInfo gameInfo) {
         precheck(2);
+        //sleep for real!!
+        System.out.println(">>>>>>>> SLEEEEPPPPP");
+        sleep(3000);
         return gameInfo.isWinner(2);
     }
 

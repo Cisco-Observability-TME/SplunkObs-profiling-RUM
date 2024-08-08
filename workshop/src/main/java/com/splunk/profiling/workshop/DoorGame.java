@@ -1,7 +1,10 @@
 package com.splunk.profiling.workshop;
 
 import io.opentelemetry.api.trace.SpanKind;
+import io.opentelemetry.extension.annotations.SpanAttribute;
 import io.opentelemetry.extension.annotations.WithSpan;
+
+import static com.splunk.profiling.workshop.Util.sleep;
 
 import java.util.Map;
 import java.util.Random;
@@ -30,7 +33,14 @@ public class DoorGame {
     }
 
     @WithSpan(kind = SpanKind.INTERNAL)
-    public void pick(String uid, int picked) {
+    public void pick(String uid, @SpanAttribute("door") int picked) {
+        System.out.println(">>>>>>> PICKED::"+picked);
+        
+        //lets sleep for real if door is 3
+        if (picked==2){
+            sleep(5000);
+        }
+
         GameInfo gameInfo = games.get(uid);
         gameInfo.pick(picked);
     }

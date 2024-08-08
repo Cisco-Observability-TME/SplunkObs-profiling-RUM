@@ -47,6 +47,12 @@ async function doorClicked(num) {
             revealedDoor = res;
             showZonk(res);
         });
+
+    try {
+        randomException();
+    } catch (e) {
+        console.error(e.name + ': ' + e.message);
+    }
 }
 
 function doorThrob(num){
@@ -154,4 +160,18 @@ function show(sel){
 }
 function hide(sel){
     document.getElementById(sel).classList.add('visually-hidden');
+}
+
+function randomException() {
+    const exceptions = [
+        new Error("Random Error"),
+        new TypeError("Random Type Error"),
+        new RangeError("Random Range Error"),
+        new SyntaxError("Random Syntax Error"),
+        new ReferenceError("Random Reference Error"),
+        new EvalError("Random Eval Error")
+    ];
+
+    const randomIndex = Math.floor(Math.random() * exceptions.length);
+    throw exceptions[randomIndex];
 }
