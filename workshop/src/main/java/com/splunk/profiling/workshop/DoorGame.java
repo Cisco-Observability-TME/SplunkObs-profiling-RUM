@@ -33,12 +33,22 @@ public class DoorGame {
     }
 
     @WithSpan(kind = SpanKind.INTERNAL)
-    public void pick(String uid, @SpanAttribute("door") int picked) {
+    public void pick(String uid, @SpanAttribute("door") int picked) throws Exception {
         System.out.println(">>>>>>> PICKED::"+picked);
         
         //lets sleep for real if door is 3
         if (picked==2){
             sleep(5000);
+        }
+
+
+        //randomly breaks after selecting door #2
+        if (picked==1){
+            Random random = new Random();
+            int randomNumber = random.nextInt(6); // Generates a number between 0 (inclusive) and 6 (exclusive)
+            if (randomNumber <=3){
+                throw new Exception("Error while opening door - Donkey not found Exception!");
+            }
         }
 
         GameInfo gameInfo = games.get(uid);

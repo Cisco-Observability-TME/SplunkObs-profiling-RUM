@@ -164,12 +164,12 @@ function hide(sel){
 
 function randomException() {
     const exceptions = [
-        new Error("Random Error"),
-        new TypeError("Random Type Error"),
-        new RangeError("Random Range Error"),
-        new SyntaxError("Random Syntax Error"),
-        new ReferenceError("Random Reference Error"),
-        new EvalError("Random Eval Error")
+        new Error("Array index out of bounds"),
+        new TypeError("TypeError: invalid 'instanceof' operand 'x'"),
+        new RangeError("RangeError: argument is not a valid code point"),
+        new SyntaxError("SyntaxError: 'x' is a reserved identifier"),
+        new ReferenceError("ReferenceError: can't access lexical declaration 'X' before initialization"),
+        new EvalError("Eval Error - I can't find my glasses..")
     ];
 
     const randomIndex = Math.floor(Math.random() * exceptions.length);

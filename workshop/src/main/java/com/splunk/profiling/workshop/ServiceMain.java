@@ -16,7 +16,7 @@ public class ServiceMain {
     private final static DoorGame doorGame = new DoorGame();
 
     public static void main(String[] args) {
-        BackgroundWorker.start();
+        //BackgroundWorker.start();
         //LOGGER.info("This is an info level log message!");
         //LOGGER.info("BackGround Worker Start");
         //LOGGER.info("This is an INFO level log message!");
