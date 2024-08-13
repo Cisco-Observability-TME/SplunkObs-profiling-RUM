@@ -56,7 +56,7 @@ public class DoorGame {
     }
 
     @WithSpan(kind = SpanKind.INTERNAL)
-    public String getOutcome(String uid, int picked) {
+    public String getOutcome(String uid, @SpanAttribute("workflow.name") int picked) {
         GameInfo gameInfo = games.get(uid);
         return gameOfficial.isWinner(gameInfo, picked) ? "WIN" : "LOSE";
     }

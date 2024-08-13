@@ -1,9 +1,13 @@
 
 console.log('doorgame starting.');
 
+
 let gameId = null;
 let revealedDoor = null;
 let chosenDoor = null;
+
+//getting a tracer from Splunk instrumentation
+const tracervo = SplunkRum.provider.getTracer("granpatracer");
 
 function startGame(){
     console.log('Starting new game');
@@ -24,10 +28,18 @@ function startGame(){
 }
 
 async function doorClicked(num) {
+
     console.log(`Door ${num} picked.`);
     chosenDoor = num;
     disableDoors();
     doorThrob(num);
+
+    //start the span with an attribute
+    const span = tracervo.startSpan('clickSpan', {
+        attributes: {
+              'workflow.name': 'door'+num
+        }
+        });
 
     const url = `/game/${gameId}/pick/${num}`;
     await fetch(url, { method: 'POST'})
@@ -53,6 +65,9 @@ async function doorClicked(num) {
     } catch (e) {
         console.error(e.name + ': ' + e.message);
     }
+    //span end
+    span.end();
+
 }
 
 function doorThrob(num){
